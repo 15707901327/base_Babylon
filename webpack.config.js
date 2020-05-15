@@ -19,7 +19,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: '测试',
-      filename: 'example.ts.html',
+      filename: 'example.html',
       template: path.resolve(__dirname, 'src/template.html')
     }),
     //配置CleanWebpackPlugin插件

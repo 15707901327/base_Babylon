@@ -2,7 +2,7 @@ import { Nullable } from "./types";
 // import { Tools } from "./Misc/tools";
 // import { IAnimatable } from './Animations/animatable.interface';
 // import { PrecisionDate } from "./Misc/precisionDate";
-import { Observable, Observer } from "./Misc/observable";
+import { Observable, Observer } from "./Misc";
 // import { SmartArrayNoDuplicate, SmartArray, ISmartArrayLike } from "./Misc/smartArray";
 // import { StringDictionary } from "./Misc/stringDictionary";
 // import { Tags } from "./Misc/tags";
@@ -16,7 +16,7 @@ import { Observable, Observer } from "./Misc/observable";
 // import { Bone } from "./Bones/bone";
 // import { Skeleton } from "./Bones/skeleton";
 // import { MorphTargetManager } from "./Morph/morphTargetManager";
-// import { Camera } from "./Cameras/camera";
+import { Camera } from "./Cameras/camera";
 // import { AbstractScene } from "./abstractScene";
 // import { BaseTexture } from "./Materials/Textures/baseTexture";
 // import { Texture } from "./Materials/Textures/texture";
@@ -37,15 +37,20 @@ import { Observable, Observer } from "./Misc/observable";
 // import { IOfflineProvider } from "./Offline/IOfflineProvider";
 // import { RenderingGroupInfo, RenderingManager, IRenderingManagerAutoClearSetup } from "./Rendering/renderingManager";
 // import { ISceneComponent, ISceneSerializableComponent, Stage, SimpleStageAction, RenderTargetsStageAction, RenderTargetStageAction, MeshStageAction, EvaluateSubMeshStageAction, ActiveMeshStageAction, CameraStageAction, RenderingGroupStageAction, RenderingMeshStageAction, PointerMoveStageAction, PointerUpDownStageAction, CameraStageFrameBufferAction } from "./sceneComponent";
-import { Engine } from "./Engines/engine";
+import { Engine } from "./Engines";
 // import { Node } from "./node";
 // import { MorphTarget } from "./Morph/morphTarget";
 import { Constants } from "./Engines/constants";
 import { DomManagement } from "./Misc/domManagement";
 import { Logger } from "./Misc/logger";
-import { EngineStore } from "./Engines/engineStore";
+import { EngineStore } from "./Engines";
 import {AbstractScene} from "./abstractScene";
 import {IAnimatable} from "./animation/animatable.interface";
+import {RenderingManager} from "./Rendering/renderingManager";
+import {PostProcessManager} from "./PostProcessManager/postProcessManager";
+import {InputManager} from "./Inputs/scene.inputManager";
+import {UniformBuffer} from "./Materials/uniformBuffer";
+import {UniqueIdGenerator} from "./Misc/uniqueIdGenerator";
 // import { AbstractActionManager } from './Actions/abstractActionManager';
 // import { _DevTools } from './Misc/devTools';
 // import { WebRequest } from './Misc/webRequest';
@@ -146,7 +151,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     // Members
 
     /** @hidden */
-    // public _inputManager = new InputManager(this);
+    public _inputManager = new InputManager(this);
 
     /** Define this parameter if you are using multiple cameras and you want to specify which one should be used for pointer position */
     // public cameraToUseForPointers: Nullable<Camera> = null;
@@ -524,13 +529,13 @@ export class Scene extends AbstractScene implements IAnimatable {
     /**
     * An event triggered when SceneLoader.Append or SceneLoader.Load or SceneLoader.ImportMesh were successfully executed
     */
-    // public onDataLoadedObservable = new Observable<Scene>();
-    //
-    // /**
-    // * An event triggered when a camera is created
-    // */
-    // public onNewCameraAddedObservable = new Observable<Camera>();
-    //
+    public onDataLoadedObservable = new Observable<Scene>();
+
+    /**
+    * An event triggered when a camera is created
+    */
+    public onNewCameraAddedObservable = new Observable<Camera>();
+
     // /**
     // * An event triggered when a camera is removed
     // */
@@ -918,21 +923,21 @@ export class Scene extends AbstractScene implements IAnimatable {
     // /** All of the active cameras added to this scene. */
     // public activeCameras = new Array<Camera>();
     //
-    // /** @hidden */
-    // public _activeCamera: Nullable<Camera>;
-    // /** Gets or sets the current active camera */
-    // public get activeCamera(): Nullable<Camera> {
-    //     return this._activeCamera;
-    // }
-    //
-    // public set activeCamera(value: Nullable<Camera>) {
-    //     if (value === this._activeCamera) {
-    //         return;
-    //     }
-    //
-    //     this._activeCamera = value;
-    //     this.onActiveCameraChanged.notifyObservers(this);
-    // }
+    /** @hidden */
+    public _activeCamera: Nullable<Camera>;
+    /** Gets or sets the current active camera */
+    public get activeCamera(): Nullable<Camera> {
+        return this._activeCamera;
+    }
+
+    public set activeCamera(value: Nullable<Camera>) {
+        if (value === this._activeCamera) {
+            return;
+        }
+
+        this._activeCamera = value;
+        this.onActiveCameraChanged.notifyObservers(this);
+    }
     //
     // private _defaultMaterial: Material;
     //
@@ -1036,10 +1041,10 @@ export class Scene extends AbstractScene implements IAnimatable {
     //  * The list of postprocesses added to the scene
     //  */
     // public postProcesses = new Array<PostProcess>();
-    // /**
-    //  * Gets the current postprocess manager
-    //  */
-    // public postProcessManager: PostProcessManager;
+    /**
+     * Gets the current postprocess manager
+     */
+    public postProcessManager: PostProcessManager;
 
     // Customs render targets
     /**
@@ -1155,14 +1160,14 @@ export class Scene extends AbstractScene implements IAnimatable {
     // public _activeParticleSystems = new SmartArray<IParticleSystem>(256);
     // private _activeSkeletons = new SmartArrayNoDuplicate<Skeleton>(32);
     // private _softwareSkinnedMeshes = new SmartArrayNoDuplicate<Mesh>(32);
-    //
-    // private _renderingManager: RenderingManager;
-    //
+
+    private _renderingManager: RenderingManager;
+
     // /** @hidden */
     // public _activeAnimatables = new Array<Animatable>();
     //
     // private _transformMatrix = Matrix.Zero();
-    // private _sceneUbo: UniformBuffer;
+    private _sceneUbo: UniformBuffer;
 
     // /** @hidden */
     // public _viewMatrix: Matrix;
@@ -1383,26 +1388,26 @@ export class Scene extends AbstractScene implements IAnimatable {
         };
 
         this._engine = engine || EngineStore.LastCreatedEngine;
-        // if (!fullOptions.virtual) {
-        //     EngineStore._LastCreatedScene = this;
-        //     this._engine.scenes.push(this);
-        // }
+        if (!fullOptions.virtual) {
+            EngineStore._LastCreatedScene = this;
+            this._engine.scenes.push(this);
+        }
 
-        // this._uid = null;
-        //
-        // this._renderingManager = new RenderingManager(this);
-        //
-        // if (PostProcessManager) {
-        //     this.postProcessManager = new PostProcessManager(this);
-        // }
-        //
-        // if (DomManagement.IsWindowObjectExist()) {
-        //     this.attachControl();
-        // }
-        //
-        // // Uniform Buffer
-        // this._createUbo();
-        //
+        this._uid = null;
+
+        this._renderingManager = new RenderingManager(this);
+
+        if (PostProcessManager) {
+            this.postProcessManager = new PostProcessManager(this);
+        }
+
+        if (DomManagement.IsWindowObjectExist()) {
+            this.attachControl();
+        }
+
+        // Uniform Buffer
+        this._createUbo();
+
         // // Default Image processing definition
         // if (ImageProcessingConfiguration) {
         //     this._imageProcessingConfiguration = new ImageProcessingConfiguration();
@@ -1639,17 +1644,18 @@ export class Scene extends AbstractScene implements IAnimatable {
     //     return this._frameId;
     // }
     //
-    // /** Call this function if you want to manually increment the render Id*/
-    // public incrementRenderId(): void {
-    //     this._renderId++;
-    // }
-    //
-    // private _createUbo(): void {
-    //     this._sceneUbo = new UniformBuffer(this._engine, undefined, true);
-    //     this._sceneUbo.addUniform("viewProjection", 16);
-    //     this._sceneUbo.addUniform("view", 16);
-    // }
-    //
+    /** Call this function if you want to manually increment the render Id*/
+    public incrementRenderId(): void {
+        this._renderId++;
+    }
+
+    private _createUbo(): void {
+        console.log("cehsi ");
+        this._sceneUbo = new UniformBuffer(this._engine, undefined, true);
+        this._sceneUbo.addUniform("viewProjection", 16);
+        this._sceneUbo.addUniform("view", 16);
+    }
+
     // /**
     //  * Use this method to simulate a pointer move on a mesh
     //  * The pickResult parameter can be obtained from a scene.pick or scene.pickWithRay
@@ -1695,17 +1701,17 @@ export class Scene extends AbstractScene implements IAnimatable {
     // public isPointerCaptured(pointerId = 0): boolean {
     //     return this._inputManager.isPointerCaptured(pointerId);
     // }
-    //
-    // /**
-    // * Attach events to the canvas (To handle actionManagers triggers and raise onPointerMove, onPointerDown and onPointerUp
-    // * @param attachUp defines if you want to attach events to pointerup
-    // * @param attachDown defines if you want to attach events to pointerdown
-    // * @param attachMove defines if you want to attach events to pointermove
-    // */
-    // public attachControl(attachUp = true, attachDown = true, attachMove = true): void {
-    //     this._inputManager.attachControl(attachUp, attachDown, attachMove);
-    // }
-    //
+
+    /**
+    * Attach events to the canvas (To handle actionManagers triggers and raise onPointerMove, onPointerDown and onPointerUp
+    * @param attachUp defines if you want to attach events to pointerup
+    * @param attachDown defines if you want to attach events to pointerdown
+    * @param attachMove defines if you want to attach events to pointermove
+    */
+    public attachControl(attachUp = true, attachDown = true, attachMove = true): void {
+        this._inputManager.attachControl(attachUp, attachDown, attachMove);
+    }
+
     // /** Detaches all event handlers*/
     // public detachControl() {
     //     this._inputManager.detachControl();
@@ -2026,13 +2032,13 @@ export class Scene extends AbstractScene implements IAnimatable {
     //     return this._multiviewSceneUbo ? this._multiviewSceneUbo : this._sceneUbo;
     // }
     //
-    // /**
-    //  * Gets an unique (relatively to the current scene) Id
-    //  * @returns an unique number for the scene
-    //  */
-    // public getUniqueId() {
-    //     return UniqueIdGenerator.UniqueId;
-    // }
+    /**
+     * Gets an unique (relatively to the current scene) Id
+     * @returns an unique number for the scene
+     */
+    public getUniqueId() {
+        return UniqueIdGenerator.UniqueId;
+    }
     //
     // /**
     //  * Add a mesh to the list of scene's meshes
@@ -2357,20 +2363,20 @@ export class Scene extends AbstractScene implements IAnimatable {
     //         this.lights.sort(Light.CompareLightsPriority);
     //     }
     // }
-    //
-    // /**
-    //  * Adds the given camera to this scene
-    //  * @param newCamera The camera to add
-    //  */
-    // public addCamera(newCamera: Camera): void {
-    //     this.cameras.push(newCamera);
-    //     this.onNewCameraAddedObservable.notifyObservers(newCamera);
-    //
-    //     if (!newCamera.parent) {
-    //         newCamera._addToSceneRootNodes();
-    //     }
-    // }
-    //
+
+    /**
+     * Adds the given camera to this scene
+     * @param newCamera The camera to add
+     */
+    public addCamera(newCamera: Camera): void {
+        this.cameras.push(newCamera);
+        this.onNewCameraAddedObservable.notifyObservers(newCamera);
+
+        if (!newCamera.parent) {
+            newCamera._addToSceneRootNodes();
+        }
+    }
+
     // /**
     //  * Adds the given skeleton to this scene
     //  * @param newSkeleton The skeleton to add

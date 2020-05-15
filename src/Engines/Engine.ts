@@ -6,6 +6,7 @@ import { EngineStore } from "./engineStore";
 import { ThinEngine, EngineOptions } from './thinEngine';
 import { PerformanceMonitor } from '../Misc/performanceMonitor';
 import {IOfflineProvider} from "../Offline";
+import {Scene} from "../scene";
 // import { DataBuffer } from '../Meshes/dataBuffer';
 // import { PerfCounter } from '../Misc/perfCounter';
 // import { WebGLDataBuffer } from '../Meshes/WebGL/webGLDataBuffer';
@@ -317,12 +318,12 @@ export class Engine extends ThinEngine {
     //  * Gets or sets a boolean to enable/disable checking manifest if IndexedDB support is enabled (js will always consider the database is up to date)
     //  **/
     // public disableManifestCheck = false;
-    //
-    // /**
-    //  * Gets the list of created scenes
-    //  */
-    // public scenes = new Array<Scene>();
-    //
+
+    /**
+     * Gets the list of created scenes
+     */
+    public scenes = new Array<Scene>();
+
     // /**
     //  * Event raised when a new scene is created
     //  */
