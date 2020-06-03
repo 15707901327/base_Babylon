@@ -233,8 +233,8 @@ export class ThinEngine {
     /** @hidden */
     public _gl: WebGLRenderingContext;
     /** @hidden */
-    public _webGLVersion = 1.0;
-    protected _renderingCanvas: Nullable<HTMLCanvasElement>;
+    public _webGLVersion = 1.0; // webgl版本
+    protected _renderingCanvas: Nullable<HTMLCanvasElement>; // 渲染面板
     protected _windowIsBackground = false;
     protected _creationOptions: EngineOptions;
 
@@ -353,6 +353,7 @@ export class ThinEngine {
     public _currentFramebuffer: Nullable<WebGLFramebuffer> = null;
     /** @hidden */
     public _dummyFramebuffer: Nullable<WebGLFramebuffer> = null;
+    // 数组长度为attribute支持的最大个数
     private _currentBufferPointers = new Array<BufferPointer>();
     private _currentInstanceLocations = new Array<number>();
     private _currentInstanceBuffers = new Array<DataBuffer>();
@@ -715,6 +716,10 @@ export class ThinEngine {
         }
     }
 
+    /**
+     * 初始化上下文（包含扩展函数）
+     * @private
+     */
     protected _initGLContext(): void {
         // Caps
         this._caps = {

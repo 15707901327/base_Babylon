@@ -489,11 +489,14 @@ export class Engine extends ThinEngine {
 
         options = this._creationOptions;
 
+        // 保存引擎实例
         Engine.Instances.push(this);
 
+        // 添加事件
         if ((<any>canvasOrContext).getContext) {
             let canvas = <HTMLCanvasElement>canvasOrContext;
 
+            // 添加焦点事件
             this._onCanvasFocus = () => {
                 this.onCanvasFocusObservable.notifyObservers(this);
             };

@@ -4,6 +4,7 @@ declare type Engine = import("./engine").Engine;
 declare type Scene = import("../scene").Scene;
 
 /**
+ * 保存创建的engine、scene实例
  * The engine store class is responsible to hold all the instances of Engine and Scene created
  * during the life time of the application.
  */
