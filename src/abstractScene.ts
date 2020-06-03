@@ -1,26 +1,22 @@
 import { Scene } from "./scene";
 import { Nullable } from "./types";
-import {AssetContainer} from "./assetContainer";
-import {Camera} from "./Cameras";
-import {Light} from "./Lights";
 import {AbstractMesh} from "./Meshes/abstractMesh";
-// import { AbstractMesh } from "./Meshes/abstractMesh";
-// import { TransformNode } from "./Meshes/transformNode";
-// import { Geometry } from "./Meshes/geometry";
-// import { Skeleton } from "./Bones/skeleton";
-// import { MorphTargetManager } from "./Morph/morphTargetManager";
-// import { AssetContainer } from "./assetContainer";
-// import { IParticleSystem } from "./Particles/IParticleSystem";
-// import { AnimationGroup } from "./Animations/animationGroup";
-// import { BaseTexture } from "./Materials/Textures/baseTexture";
-// import { Material } from "./Materials/material";
-// import { MultiMaterial } from "./Materials/multiMaterial";
-// import { AbstractActionManager } from "./Actions/abstractActionManager";
-// import { Camera } from "./Cameras/camera";
-// import { Light } from "./Lights/light";
-// import { Node } from "./node";
+import { TransformNode } from "./Meshes/transformNode";
+import { Geometry } from "./Meshes/geometry";
+import { Skeleton } from "./Bones/skeleton";
+import { MorphTargetManager } from "./Morph/morphTargetManager";
+import { AssetContainer } from "./assetContainer";
+import { IParticleSystem } from "./Particles/IParticleSystem";
+import { AnimationGroup } from "./Animations/animationGroup";
+import { BaseTexture } from "./Materials/Textures/baseTexture";
+import { Material } from "./Materials/material";
+import { MultiMaterial } from "./Materials/multiMaterial";
+import { AbstractActionManager } from "./Actions/abstractActionManager";
+import { Camera } from "./Cameras/camera";
+import { Light } from "./Lights/light";
+import { Node } from "./node";
 
-// declare type Animation = import("./Animations/animation").Animation;
+declare type Animation = import("./Animations/animation").Animation;
 
 /**
  * Defines how the parser contract is defined.
@@ -130,89 +126,89 @@ export abstract class AbstractScene {
     */
     public meshes = new Array<AbstractMesh>();
 
-    // /**
-    //  * The list of skeletons added to the scene
-    //  * @see http://doc.babylonjs.com/how_to/how_to_use_bones_and_skeletons
-    //  */
-    // public skeletons = new Array<Skeleton>();
-    //
-    // /**
-    // * All of the particle systems added to this scene
-    // * @see http://doc.babylonjs.com/babylon101/particles
-    // */
-    // public particleSystems = new Array<IParticleSystem>();
+    /**
+     * The list of skeletons added to the scene
+     * @see http://doc.babylonjs.com/how_to/how_to_use_bones_and_skeletons
+     */
+    public skeletons = new Array<Skeleton>();
+
+    /**
+    * All of the particle systems added to this scene
+    * @see http://doc.babylonjs.com/babylon101/particles
+    */
+    public particleSystems = new Array<IParticleSystem>();
 
     /**
      * Gets a list of Animations associated with the scene
      */
     public animations: Animation[] = [];
 
-    // /**
-    // * All of the animation groups added to this scene
-    // * @see http://doc.babylonjs.com/how_to/group
-    // */
-    // public animationGroups = new Array<AnimationGroup>();
-    //
-    // /**
-    // * All of the multi-materials added to this scene
-    // * @see http://doc.babylonjs.com/how_to/multi_materials
-    // */
-    // public multiMaterials = new Array<MultiMaterial>();
-    //
-    // /**
-    // * All of the materials added to this scene
-    // * In the context of a Scene, it is not supposed to be modified manually.
-    // * Any addition or removal should be done using the addMaterial and removeMaterial Scene methods.
-    // * Note also that the order of the Material within the array is not significant and might change.
-    // * @see http://doc.babylonjs.com/babylon101/materials
-    // */
-    // public materials = new Array<Material>();
-    //
-    // /**
-    //  * The list of morph target managers added to the scene
-    //  * @see http://doc.babylonjs.com/how_to/how_to_dynamically_morph_a_mesh
-    //  */
-    // public morphTargetManagers = new Array<MorphTargetManager>();
-    //
-    // /**
-    //  * The list of geometries used in the scene.
-    //  */
-    // public geometries = new Array<Geometry>();
-    //
-    // /**
-    // * All of the tranform nodes added to this scene
-    // * In the context of a Scene, it is not supposed to be modified manually.
-    // * Any addition or removal should be done using the addTransformNode and removeTransformNode Scene methods.
-    // * Note also that the order of the TransformNode wihin the array is not significant and might change.
-    // * @see http://doc.babylonjs.com/how_to/transformnode
-    // */
-    // public transformNodes = new Array<TransformNode>();
-    //
-    // /**
-    //  * ActionManagers available on the scene.
-    //  */
-    // public actionManagers = new Array<AbstractActionManager>();
-    //
-    // /**
-    //  * Textures to keep.
-    //  */
-    // public textures = new Array<BaseTexture>();
-    //
-    // /**
-    //  * Environment texture for the scene
-    //  */
-    // public environmentTexture: Nullable<BaseTexture> = null;
+    /**
+    * All of the animation groups added to this scene
+    * @see http://doc.babylonjs.com/how_to/group
+    */
+    public animationGroups = new Array<AnimationGroup>();
+
+    /**
+    * All of the multi-materials added to this scene
+    * @see http://doc.babylonjs.com/how_to/multi_materials
+    */
+    public multiMaterials = new Array<MultiMaterial>();
+
+    /**
+    * All of the materials added to this scene
+    * In the context of a Scene, it is not supposed to be modified manually.
+    * Any addition or removal should be done using the addMaterial and removeMaterial Scene methods.
+    * Note also that the order of the Material within the array is not significant and might change.
+    * @see http://doc.babylonjs.com/babylon101/materials
+    */
+    public materials = new Array<Material>();
+
+    /**
+     * The list of morph target managers added to the scene
+     * @see http://doc.babylonjs.com/how_to/how_to_dynamically_morph_a_mesh
+     */
+    public morphTargetManagers = new Array<MorphTargetManager>();
+
+    /**
+     * The list of geometries used in the scene.
+     */
+    public geometries = new Array<Geometry>();
+
+    /**
+    * All of the tranform nodes added to this scene
+    * In the context of a Scene, it is not supposed to be modified manually.
+    * Any addition or removal should be done using the addTransformNode and removeTransformNode Scene methods.
+    * Note also that the order of the TransformNode wihin the array is not significant and might change.
+    * @see http://doc.babylonjs.com/how_to/transformnode
+    */
+    public transformNodes = new Array<TransformNode>();
+
+    /**
+     * ActionManagers available on the scene.
+     */
+    public actionManagers = new Array<AbstractActionManager>();
+
+    /**
+     * Textures to keep.
+     */
+    public textures = new Array<BaseTexture>();
+
+    /**
+     * Environment texture for the scene
+     */
+    public environmentTexture: Nullable<BaseTexture> = null;
 
     /**
      * @returns all meshes, lights, cameras, transformNodes and bones
      */
     public getNodes(): Array<Node> {
         let nodes = new Array<Node>();
-        // nodes = nodes.concat(this.meshes);
-        // nodes = nodes.concat(this.lights);
-        // nodes = nodes.concat(this.cameras);
-        // nodes = nodes.concat(this.transformNodes); // dummies
-        // this.skeletons.forEach((skeleton) => nodes = nodes.concat(skeleton.bones));
+        nodes = nodes.concat(this.meshes);
+        nodes = nodes.concat(this.lights);
+        nodes = nodes.concat(this.cameras);
+        nodes = nodes.concat(this.transformNodes); // dummies
+        this.skeletons.forEach((skeleton) => nodes = nodes.concat(skeleton.bones));
         return nodes;
     }
 }

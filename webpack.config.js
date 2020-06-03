@@ -12,7 +12,7 @@ module.exports = {
   },
   module: {
     rules: [
-      {test: /\.ts$/, use: 'ts-loader'}
+      {test: /\.ts$/, use: 'ts-loader'},
     ]
   },
   //配置HtmlWebpackPlugin插件
@@ -22,8 +22,8 @@ module.exports = {
       filename: 'example.html',
       template: path.resolve(__dirname, 'src/template.html')
     }),
-    //配置CleanWebpackPlugin插件
-    new CleanWebpackPlugin()
+    // 清除文件
+    // new CleanWebpackPlugin()
   ],
   //配置SplitChunksPlugin
   optimization: {
