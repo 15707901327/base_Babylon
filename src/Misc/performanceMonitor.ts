@@ -1,5 +1,5 @@
 import { Nullable } from "../types";
-// import { PrecisionDate } from "./precisionDate";
+import { PrecisionDate } from "./precisionDate";
 
 /**
  * Performance monitor tracks rolling average frame-time and frame-time variance over a user defined sliding-window
@@ -18,20 +18,20 @@ export class PerformanceMonitor {
         this._rollingFrameTime = new RollingAverage(frameSampleSize);
     }
 
-    // /**
-    //  * Samples current frame
-    //  * @param timeMs A timestamp in milliseconds of the current frame to compare with other frames
-    //  */
-    // public sampleFrame(timeMs: number = PrecisionDate.Now) {
-    //     if (!this._enabled) { return; }
-    //
-    //     if (this._lastFrameTimeMs != null) {
-    //         let dt = timeMs - this._lastFrameTimeMs;
-    //         this._rollingFrameTime.add(dt);
-    //     }
-    //
-    //     this._lastFrameTimeMs = timeMs;
-    // }
+    /**
+     * Samples current frame
+     * @param timeMs A timestamp in milliseconds of the current frame to compare with other frames
+     */
+    public sampleFrame(timeMs: number = PrecisionDate.Now) {
+        if (!this._enabled) { return; }
+
+        if (this._lastFrameTimeMs != null) {
+            let dt = timeMs - this._lastFrameTimeMs;
+            this._rollingFrameTime.add(dt);
+        }
+
+        this._lastFrameTimeMs = timeMs;
+    }
 
     /**
      * Returns the average frame time in milliseconds over the sliding window (or the subset of frames sampled so far)

@@ -345,11 +345,15 @@ export class ThinEngine {
     protected _cachedIndexBuffer: Nullable<DataBuffer>;
     /** @hidden */
     protected _cachedEffectForVertexBuffers: Nullable<Effect>;
-    /** @hidden */
+    /**
+     * 渲染目标
+     * @hidden */
     public _currentRenderTarget: Nullable<InternalTexture>;
     private _uintIndicesCurrentlySet = false;
     protected _currentBoundBuffer = new Array<Nullable<WebGLBuffer>>();
-    /** @hidden */
+    /**
+     * 当前绑定的帧缓冲对象
+     * @hidden */
     public _currentFramebuffer: Nullable<WebGLFramebuffer> = null;
     /** @hidden */
     public _dummyFramebuffer: Nullable<WebGLFramebuffer> = null;
@@ -1312,7 +1316,9 @@ export class ThinEngine {
         this.wipeCaches();
     }
 
-    /** @hidden */
+    /**
+     * 绑定帧缓冲对象
+     * @hidden */
     public _bindUnboundFramebuffer(framebuffer: Nullable<WebGLFramebuffer>) {
         if (this._currentFramebuffer !== framebuffer) {
             this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, framebuffer);
@@ -1365,6 +1371,7 @@ export class ThinEngine {
     }
 
     /**
+     * 绑定渲染目标，察除缓冲
      * Unbind the current render target and bind the default framebuffer
      */
     public restoreDefaultFramebuffer(): void {
@@ -1905,6 +1912,7 @@ export class ThinEngine {
     }
 
     /**
+     * 绘制
      * Draw a list of indexed primitives
      * @param fillMode defines the primitive to use
      * @param indexStart defines the starting index
@@ -1919,6 +1927,7 @@ export class ThinEngine {
 
         // Render
 
+        // 获取绘制模式
         const drawMode = this._drawMode(fillMode);
         var indexFormat = this._uintIndicesCurrentlySet ? this._gl.UNSIGNED_INT : this._gl.UNSIGNED_SHORT;
         var mult = this._uintIndicesCurrentlySet ? 4 : 2;
@@ -2590,6 +2599,7 @@ export class ThinEngine {
     }
 
     /**
+     * 强制清除整个缓冲
      * Force the entire cache to be cleared
      * You should not have to use this function unless your engine needs to share the webGL context with another engine
      * @param bruteForce defines a boolean to force clearing ALL caches (including stencil, detoh and alpha states)

@@ -1436,7 +1436,13 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         return this;
     }
 
-    /** @hidden */
+    /**
+     * 判断绘制类型，进行绘制
+     * @param subMesh 绘制的网格
+     * @param fillMode 绘制模式
+     * @param instancesCount 实例数
+     * @hidden
+     */
     public _draw(subMesh: SubMesh, fillMode: number, instancesCount?: number): Mesh {
         if (!this._geometry || !this._geometry.getVertexBuffers() || (!this._unIndexed && !this._geometry.getIndexBuffer())) {
             return this;
@@ -1614,7 +1620,18 @@ export class Mesh extends AbstractMesh implements IGetSetVerticesData {
         // Do nothing
     }
 
-    /** @hidden */
+    /**
+     * 执行渲染
+     * @param renderingMesh
+     * @param subMesh
+     * @param effect
+     * @param fillMode
+     * @param batch
+     * @param hardwareInstancedRendering
+     * @param onBeforeDraw
+     * @param effectiveMaterial
+     * @hidden
+     */
     public _processRendering(renderingMesh: AbstractMesh, subMesh: SubMesh, effect: Effect, fillMode: number, batch: _InstancesBatch, hardwareInstancedRendering: boolean,
         onBeforeDraw: (isInstance: boolean, world: Matrix, effectiveMaterial?: Material) => void, effectiveMaterial?: Material): Mesh {
         var scene = this.getScene();

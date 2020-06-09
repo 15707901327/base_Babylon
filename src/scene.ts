@@ -1080,6 +1080,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
     // Customs render targets
     /**
+     * 是否启用了渲染目标
      * Gets or sets a boolean indicating if render targets are enabled on this scene
      */
     public renderTargetsEnabled = true;
@@ -1165,9 +1166,9 @@ export class Scene extends AbstractScene implements IAnimatable {
     public _cachedVisibility: Nullable<number>;
 
     private _renderId = 0;
-    private _frameId = 0;
+    private _frameId = 0; // 标记当前帧id
     private _executeWhenReadyTimeoutId = -1;
-    private _intermediateRendering = false;
+    private _intermediateRendering = false; // 标记渲染中
 
     private _viewUpdateFlag = -1;
     private _projectionUpdateFlag = -1;
@@ -1178,7 +1179,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
     /** @hidden */
     public _pendingData = new Array();
-    private _isDisposed = false;
+    private _isDisposed = false; // 记录场景是否已经删除
 
     /**
      * Gets or sets a boolean indicating that all submeshes of active meshes must be rendered
@@ -1446,6 +1447,7 @@ export class Scene extends AbstractScene implements IAnimatable {
             this._imageProcessingConfiguration = new ImageProcessingConfiguration();
         }
 
+        // 设置默认候选程序
         this.setDefaultCandidateProviders();
 
         if (fullOptions.useGeometryUniqueIdsMap) {
@@ -1468,6 +1470,9 @@ export class Scene extends AbstractScene implements IAnimatable {
         return "Scene";
     }
 
+    /**
+     * 默认候选网格
+     */
     private _defaultMeshCandidates: ISmartArrayLike<AbstractMesh> = {
         data: [],
         length: 0
@@ -1497,6 +1502,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     }
 
     /**
+     * 设置场景的默认候选提供程序
      * Sets the default candidate providers for the scene.
      * This sets the getActiveMeshCandidates, getActiveSubMeshCandidates, getIntersectingSubMeshCandidates
      * and getCollidingSubMeshCandidates to their default function
@@ -3500,6 +3506,10 @@ export class Scene extends AbstractScene implements IAnimatable {
         return this;
     }
 
+    /**
+     * 评估激活网格
+     * @private
+     */
     private _evaluateActiveMeshes(): void {
         if (this._activeMeshesFrozen && this._activeMeshes.length) {
 
@@ -3542,6 +3552,7 @@ export class Scene extends AbstractScene implements IAnimatable {
                 continue;
             }
 
+            // 记录顶点数量
             this._totalVertices.addCount(mesh.getTotalVertices(), false);
 
             if (!mesh.isReady() || !mesh.isEnabled() || mesh.scaling.lengthSquared() === 0) {
@@ -3654,10 +3665,15 @@ export class Scene extends AbstractScene implements IAnimatable {
         this.setTransformMatrix(this.activeCamera.getViewMatrix(), this.activeCamera.getProjectionMatrix(force));
     }
 
+    /**
+     * 绑定帧缓冲
+     * @private
+     */
     private _bindFrameBuffer() {
         if (this.activeCamera && this.activeCamera._multiviewTexture) {
             this.activeCamera._multiviewTexture._bindFrameBuffer();
-        } else if (this.activeCamera && this.activeCamera.outputRenderTarget) {
+        }
+        else if (this.activeCamera && this.activeCamera.outputRenderTarget) {
             var useMultiview = this.getEngine().getCaps().multiview && this.activeCamera.outputRenderTarget && this.activeCamera.outputRenderTarget.getViewCount() > 1;
             if (useMultiview) {
                 this.activeCamera.outputRenderTarget._bindFrameBuffer();
@@ -3669,7 +3685,8 @@ export class Scene extends AbstractScene implements IAnimatable {
                     Logger.Error("Camera contains invalid customDefaultRenderTarget");
                 }
             }
-        } else {
+        }
+        else {
             this.getEngine().restoreDefaultFramebuffer(); // Restore back buffer if needed
         }
     }
@@ -3677,7 +3694,10 @@ export class Scene extends AbstractScene implements IAnimatable {
     /** @hidden */
     public _allowPostProcessClearColor = true;
 
-    /** @hidden */
+    /**
+     * 渲染相机
+     * @hidden
+     */
     public _renderForCamera(camera: Camera, rigParent?: Camera): void {
         if (camera && camera._skipRendering) {
             return;
@@ -3708,7 +3728,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
         this.onBeforeCameraRenderObservable.notifyObservers(this.activeCamera);
 
-        // Meshes
+        // Meshes 评估激活网格
         this._evaluateActiveMeshes();
 
         // Software skinning
@@ -3806,7 +3826,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     }
 
     /**
-     * 处理相机方法
+     * 处理子相机
      * @param camera
      * @private
      */
@@ -3953,10 +3973,13 @@ export class Scene extends AbstractScene implements IAnimatable {
      * @param ignoreAnimations defines a boolean indicating if animations should not be executed (false by default)
      */
     public render(updateCameras = true, ignoreAnimations = false): void {
+
+        // 检测场景是否可用
         if (this.isDisposed) {
             return;
         }
 
+        // 检测是否有观察者
         if (this.onReadyObservable.hasObservers() && this._executeWhenReadyTimeoutId === -1) {
             this._checkIsReady();
         }
@@ -3966,6 +3989,7 @@ export class Scene extends AbstractScene implements IAnimatable {
         // Register components that have been associated lately to the scene.
         this._registerTransientComponents();
 
+        // 初始化数据监测
         this._activeParticles.fetchNewFrame();
         this._totalVertices.fetchNewFrame();
         this._activeIndices.fetchNewFrame();
@@ -3973,6 +3997,7 @@ export class Scene extends AbstractScene implements IAnimatable {
         this._meshesForIntersections.reset();
         this.resetCachedMaterial();
 
+        // 通知观察者执行
         this.onBeforeAnimationsObservable.notifyObservers(this);
 
         // Actions
@@ -3980,17 +4005,17 @@ export class Scene extends AbstractScene implements IAnimatable {
             this.actionManager.processTrigger(Constants.ACTION_OnEveryFrameTrigger);
         }
 
-        // Animations
+        // Animations 执行动画
         if (!ignoreAnimations) {
             this.animate();
         }
 
-        // Before camera update steps
+        // Before camera update steps 相机更新前执行方法
         for (let step of this._beforeCameraUpdateStage) {
             step.action();
         }
 
-        // Update Cameras
+        // Update Cameras 更新相机
         if (updateCameras) {
             if (this.activeCameras.length > 0) {
                 for (var cameraIndex = 0; cameraIndex < this.activeCameras.length; cameraIndex++) {
@@ -4004,6 +4029,7 @@ export class Scene extends AbstractScene implements IAnimatable {
                     }
                 }
             } else if (this.activeCamera) {
+                // 更新相机
                 this.activeCamera.update();
                 if (this.activeCamera.cameraRigMode !== Camera.RIG_MODE_NONE) {
                     // rig cameras
@@ -4052,6 +4078,7 @@ export class Scene extends AbstractScene implements IAnimatable {
         // Restore back buffer
         this.activeCamera = currentActiveCamera;
         if (this._activeCamera && this._activeCamera.cameraRigMode !== Camera.RIG_MODE_CUSTOM) {
+            // 绑定帧缓冲
             this._bindFrameBuffer();
         }
         this.onAfterRenderTargetsRenderObservable.notifyObservers(this);
@@ -4083,7 +4110,7 @@ export class Scene extends AbstractScene implements IAnimatable {
             if (!this.activeCamera) {
                 throw new Error("No camera defined");
             }
-
+            // 处理子相机
             this._processSubCameras(this.activeCamera);
         }
 
