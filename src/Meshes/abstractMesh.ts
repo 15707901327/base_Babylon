@@ -299,7 +299,9 @@ export class AbstractMesh extends TransformNode implements IDisposable, ICullabl
     /** @hidden */
     public _occlusionQuery: Nullable<WebGLQuery> = null;
 
-    /** @hidden */
+    /**
+     * 渲染组
+     * @hidden */
     public _renderingGroup: Nullable<RenderingGroup> = null;
 
     /**

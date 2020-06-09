@@ -20,12 +20,12 @@ import { RenderTargetTexture } from "../../Materials/Textures/renderTargetTextur
 
 import { PostProcess } from "../../PostProcesses/postProcess";
 import { BlurPostProcess } from "../../PostProcesses/blurPostProcess";
-import { _TimeToken } from "../../Instrumentation/timeToken";
+// import { _TimeToken } from "../../Instrumentation/timeToken";
 import { Constants } from "../../Engines/constants";
 
-import "../../Shaders/shadowMap.fragment";
-import "../../Shaders/shadowMap.vertex";
-import "../../Shaders/depthBoxBlur.fragment";
+// import "../../Shaders/shadowMap.fragment";
+// import "../../Shaders/shadowMap.vertex";
+// import "../../Shaders/depthBoxBlur.fragment";
 import { Observable } from '../../Misc/observable';
 import { _DevTools } from '../../Misc/devTools';
 import { EffectFallbacks } from '../../Materials/effectFallbacks';

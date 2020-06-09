@@ -965,6 +965,7 @@ export class Scene extends AbstractScene implements IAnimatable {
         this.onActiveCameraChanged.notifyObservers(this);
     }
 
+    // 场景默认材质
     private _defaultMaterial: Material;
 
     /** The default material used on meshes when no material is affected */
@@ -1186,6 +1187,7 @@ export class Scene extends AbstractScene implements IAnimatable {
      * Use this boolean to avoid computing frustum clipping on submeshes (This could help when you are CPU bound)
      */
     public dispatchAllSubMeshesOfActiveMeshes: boolean = false;
+    // 保存激活mesh
     private _activeMeshes = new SmartArray<AbstractMesh>(256);
     private _processedMaterials = new SmartArray<Material>(256);
     private _renderTargets = new SmartArrayNoDuplicate<RenderTargetTexture>(256);
@@ -3334,12 +3336,20 @@ export class Scene extends AbstractScene implements IAnimatable {
         return this._externalData.remove(key);
     }
 
+    /**
+     * 苹果子网格
+     * @param subMesh
+     * @param mesh
+     * @param initialMesh
+     * @private
+     */
     private _evaluateSubMesh(subMesh: SubMesh, mesh: AbstractMesh, initialMesh: AbstractMesh): void {
         if (initialMesh.hasInstances || initialMesh.isAnInstance || this.dispatchAllSubMeshesOfActiveMeshes || this._skipFrustumClipping || mesh.alwaysSelectAsActiveMesh || mesh.subMeshes.length === 1 || subMesh.isInFrustum(this._frustumPlanes)) {
             for (let step of this._evaluateSubMeshStage) {
                 step.action(mesh, subMesh);
             }
 
+            // 获取网格材质
             const material = subMesh.getMaterial();
             if (material !== null && material !== undefined) {
                 // Render targets
@@ -3559,6 +3569,7 @@ export class Scene extends AbstractScene implements IAnimatable {
                 continue;
             }
 
+            // 计算世界坐标
             mesh.computeWorldMatrix();
 
             // Intersections
@@ -3580,6 +3591,7 @@ export class Scene extends AbstractScene implements IAnimatable {
             mesh._preActivate();
 
             if (mesh.isVisible && mesh.visibility > 0 && ((mesh.layerMask & this.activeCamera.layerMask) !== 0) && (this._skipFrustumClipping || mesh.alwaysSelectAsActiveMesh || mesh.isInFrustum(this._frustumPlanes))) {
+                // 保存激活mesh
                 this._activeMeshes.push(mesh);
                 this.activeCamera._activeMeshes.push(mesh);
 
@@ -3596,6 +3608,7 @@ export class Scene extends AbstractScene implements IAnimatable {
                         }
                     }
                     meshToRender._internalAbstractMeshDataInfo._isActive = true;
+                    // 激活mesh
                     this._activeMesh(mesh, meshToRender);
                 }
 
@@ -3626,6 +3639,12 @@ export class Scene extends AbstractScene implements IAnimatable {
         }
     }
 
+    /**
+     * 激活网格
+     * @param sourceMesh
+     * @param mesh
+     * @private
+     */
     private _activeMesh(sourceMesh: AbstractMesh, mesh: AbstractMesh): void {
         if (this._skeletonsEnabled && mesh.skeleton !== null && mesh.skeleton !== undefined) {
             if (this._activeSkeletons.pushNoDuplicate(mesh.skeleton)) {
@@ -3641,14 +3660,12 @@ export class Scene extends AbstractScene implements IAnimatable {
             step.action(sourceMesh, mesh);
         }
 
-        if (
-            mesh !== undefined && mesh !== null
-            && mesh.subMeshes !== undefined && mesh.subMeshes !== null && mesh.subMeshes.length > 0
-        ) {
+        if (mesh !== undefined && mesh !== null && mesh.subMeshes !== undefined && mesh.subMeshes !== null && mesh.subMeshes.length > 0) {
             const subMeshes = this.getActiveSubMeshCandidates(mesh);
             const len = subMeshes.length;
             for (let i = 0; i < len; i++) {
                 const subMesh = subMeshes.data[i];
+                // 评定子网格
                 this._evaluateSubMesh(subMesh, mesh, sourceMesh);
             }
         }
@@ -3728,7 +3745,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
         this.onBeforeCameraRenderObservable.notifyObservers(this.activeCamera);
 
-        // Meshes 评估激活网格
+        // Meshes 评估激活网格，mesh添加到渲染组里面
         this._evaluateActiveMeshes();
 
         // Software skinning

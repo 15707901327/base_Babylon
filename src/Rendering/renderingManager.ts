@@ -76,7 +76,7 @@ export class RenderingManager {
     public _useSceneAutoClearSetup = false;
 
     private _scene: Scene;
-    private _renderingGroups = new Array<RenderingGroup>();
+    private _renderingGroups = new Array<RenderingGroup>(); // 保存渲染组
     private _depthStencilBufferAlreadyCleaned: boolean;
 
     private _autoClearDepthStencil: { [id: number]: IRenderingManagerAutoClearSetup } = {};
@@ -201,6 +201,11 @@ export class RenderingManager {
         }
     }
 
+    /**
+     * 准备渲染组
+     * @param renderingGroupId
+     * @private
+     */
     private _prepareRenderingGroup(renderingGroupId: number): void {
         if (this._renderingGroups[renderingGroupId] === undefined) {
             this._renderingGroups[renderingGroupId] = new RenderingGroup(renderingGroupId, this._scene,
@@ -236,10 +241,11 @@ export class RenderingManager {
     }
 
     /**
+     * 分配子网格渲染组
      * Add a submesh to the manager in order to render it this frame
-     * @param subMesh The submesh to dispatch
+     * @param subMesh The submesh to dispatch 子网格
      * @param mesh Optional reference to the submeshes's mesh. Provide if you have an exiting reference to improve performance.
-     * @param material Optional reference to the submeshes's material. Provide if you have an exiting reference to improve performance.
+     * @param material 材质 Optional reference to the submeshes's material. Provide if you have an exiting reference to improve performance.
      */
     public dispatch(subMesh: SubMesh, mesh?: AbstractMesh, material?: Nullable<Material>): void {
         if (mesh === undefined) {
@@ -247,8 +253,10 @@ export class RenderingManager {
         }
         var renderingGroupId = mesh.renderingGroupId || 0;
 
+        // 准备渲染组
         this._prepareRenderingGroup(renderingGroupId);
 
+        // 分配子网格渲染组
         this._renderingGroups[renderingGroupId].dispatch(subMesh, mesh, material);
     }
 

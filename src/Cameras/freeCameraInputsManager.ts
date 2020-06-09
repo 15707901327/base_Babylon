@@ -2,7 +2,7 @@ import { FreeCamera } from "./freeCamera";
 import { CameraInputsManager } from "./cameraInputsManager";
 import { FreeCameraKeyboardMoveInput } from "../Cameras/Inputs/freeCameraKeyboardMoveInput";
 import { FreeCameraMouseInput } from "../Cameras/Inputs/freeCameraMouseInput";
-// import { FreeCameraTouchInput } from "../Cameras/Inputs/freeCameraTouchInput";
+import { FreeCameraTouchInput } from "../Cameras/Inputs/freeCameraTouchInput";
 import { Nullable } from '../types';
 
 /**
@@ -45,31 +45,31 @@ export class FreeCameraInputsManager extends CameraInputsManager<FreeCamera> {
         return this;
     }
 
-    // /**
-    //  * Removes the mouse input support from the manager
-    //  * @returns the current input manager
-    //  */
-    // removeMouse(): FreeCameraInputsManager {
-    //     if (this._mouseInput) {
-    //         this.remove(this._mouseInput);
-    //     }
-    //     return this;
-    // }
-    //
-    // /**
-    //  * Add touch input support to the input manager.
-    //  * @returns the current input manager
-    //  */
-    // addTouch(): FreeCameraInputsManager {
-    //     this.add(new FreeCameraTouchInput());
-    //     return this;
-    // }
-    //
-    // /**
-    //  * Remove all attached input methods from a camera
-    //  */
-    // public clear(): void {
-    //     super.clear();
-    //     this._mouseInput = null;
-    // }
+    /**
+     * Removes the mouse input support from the manager
+     * @returns the current input manager
+     */
+    removeMouse(): FreeCameraInputsManager {
+        if (this._mouseInput) {
+            this.remove(this._mouseInput);
+        }
+        return this;
+    }
+
+    /**
+     * Add touch input support to the input manager.
+     * @returns the current input manager
+     */
+    addTouch(): FreeCameraInputsManager {
+        this.add(new FreeCameraTouchInput());
+        return this;
+    }
+
+    /**
+     * Remove all attached input methods from a camera
+     */
+    public clear(): void {
+        super.clear();
+        this._mouseInput = null;
+    }
 }
