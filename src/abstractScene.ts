@@ -106,6 +106,7 @@ export abstract class AbstractScene {
     }
 
     /**
+     * 保存scene下的子类
      * Gets the list of root nodes (ie. nodes with no parent)
      */
     public rootNodes = new Array<Node>();
@@ -116,6 +117,7 @@ export abstract class AbstractScene {
     public cameras = new Array<Camera>();
 
     /**
+     * 灯光集合
     * All of the lights added to this scene
     * @see http://doc.babylonjs.com/babylon101/lights
     */

@@ -5,7 +5,6 @@ import { Node } from "../node";
 import { AbstractMesh } from "../Meshes/abstractMesh";
 import { Light } from "./light";
 import { ShadowLight } from "./shadowLight";
-// import { _TimeToken } from "../Instrumentation/timeToken";
 import { Effect } from "../Materials/effect";
 
 Node.AddNodeConstructor("Light_Type_0", (name, scene) => {
@@ -150,6 +149,10 @@ export class PointLight extends ShadowLight {
             this.getDepthMinZ(activeCamera), this.getDepthMaxZ(activeCamera), matrix);
     }
 
+    /**
+     * 添加统一变量到一个缓冲块
+     * @private
+     */
     protected _buildUniformLayout(): void {
         this._uniformBuffer.addUniform("vLightData", 4);
         this._uniformBuffer.addUniform("vLightDiffuse", 4);

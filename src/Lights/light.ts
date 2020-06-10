@@ -329,6 +329,7 @@ export abstract class Light extends Node {
     public _includedOnlyMeshesIds = new Array<string>();
 
     /**
+     * 灯光统一变量缓冲
      * The current light unifom buffer.
      * @hidden Internal use only.
      */
@@ -344,13 +345,16 @@ export abstract class Light extends Node {
      */
     constructor(name: string, scene: Scene) {
         super(name, scene);
+        // 添加灯光到场景中，并添加到影响的网格上
         this.getScene().addLight(this);
+        // 创建统一变量缓冲区
         this._uniformBuffer = new UniformBuffer(this.getScene().getEngine());
         this._buildUniformLayout();
 
         this.includedOnlyMeshes = new Array<AbstractMesh>();
         this.excludedMeshes = new Array<AbstractMesh>();
 
+        // 网格同步光源
         this._resyncMeshes();
     }
 
@@ -767,6 +771,10 @@ export abstract class Light extends Node {
         this._resyncMeshes();
     }
 
+    /**
+     * 网格同步光源
+     * @private
+     */
     private _resyncMeshes() {
         for (var mesh of this.getScene().meshes) {
             mesh._resyncLightSource(this);

@@ -150,6 +150,7 @@ export class Node implements IBehaviorAware<Node> {
     /** @hidden */
     public _cache: any = {};
 
+    // 父节点
     private _parentNode: Nullable<Node> = null;
     private _children: Nullable<Node[]> = null;
 
@@ -160,7 +161,10 @@ export class Node implements IBehaviorAware<Node> {
     /** @hidden */
     public _worldMatrixDeterminantIsDirty = true;
 
-    /** @hidden */
+    /**
+     * 标记当前节点在scene子类集合中的位置
+     * @hidden
+     */
     private _sceneRootNodesIndex = -1;
 
     /**
@@ -217,7 +221,10 @@ export class Node implements IBehaviorAware<Node> {
         return this._parentNode;
     }
 
-    /** @hidden */
+    /**
+     * 添加为scene的子类
+     * @hidden
+     */
     public _addToSceneRootNodes() {
         if (this._sceneRootNodesIndex === -1) {
             this._sceneRootNodesIndex = this._scene.rootNodes.length;

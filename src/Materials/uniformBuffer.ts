@@ -22,7 +22,7 @@ import "../Engines/Extensions/engine.uniformBuffer";
  */
 export class UniformBuffer {
     private _engine: Engine;
-    private _buffer: Nullable<DataBuffer>;
+    private _buffer: Nullable<DataBuffer>; // 当前缓冲块
     private _data: number[];
     private _bufferData: Float32Array;
     private _dynamic?: boolean;
@@ -390,12 +390,16 @@ export class UniformBuffer {
         this._needSync = true;
     }
 
-    /** @hidden */
+    /**
+     * 创建缓冲块
+     * @hidden
+     */
     public _rebuild(): void {
         if (this._noUBO || !this._bufferData) {
             return;
         }
 
+        // 创建缓冲块
         if (this._dynamic) {
             this._buffer = this._engine.createDynamicUniformBuffer(this._bufferData);
         } else {

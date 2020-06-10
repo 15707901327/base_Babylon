@@ -217,10 +217,14 @@ export class ThinEngine {
      */
     public disableUniformBuffers = false;
 
-    /** @hidden */
+    /**
+     * 保存统一变量缓冲数组
+     * @hidden
+     */
     public _uniformBuffers = new Array<UniformBuffer>();
 
     /**
+     * 是否支持统一变量缓冲
      * Gets a boolean indicating that the engine supports uniform buffers
      * @see http://doc.babylonjs.com/features/webgl2#uniform-buffer-objets
      */

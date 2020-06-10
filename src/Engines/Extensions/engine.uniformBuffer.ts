@@ -56,7 +56,12 @@ declare module "../../Engines/thinEngine" {
     }
 }
 
+/**
+ * 创建缓冲块
+ * @param elements
+ */
 ThinEngine.prototype.createUniformBuffer = function(elements: FloatArray): DataBuffer {
+    // 创建缓冲
     var ubo = this._gl.createBuffer();
 
     if (!ubo) {
@@ -64,8 +69,10 @@ ThinEngine.prototype.createUniformBuffer = function(elements: FloatArray): DataB
     }
     let result = new WebGLDataBuffer(ubo);
 
+    // 绑定缓冲
     this.bindUniformBuffer(result);
 
+    // 开辟空间，写入数据
     if (elements instanceof Float32Array) {
         this._gl.bufferData(this._gl.UNIFORM_BUFFER, <Float32Array>elements, this._gl.STATIC_DRAW);
     } else {
@@ -124,6 +131,10 @@ ThinEngine.prototype.updateUniformBuffer = function(uniformBuffer: DataBuffer, e
    this.bindUniformBuffer(null);
 };
 
+/**
+ * 绑定缓冲
+ * @param buffer
+ */
 ThinEngine.prototype.bindUniformBuffer = function(buffer: Nullable<DataBuffer>): void {
     this._gl.bindBuffer(this._gl.UNIFORM_BUFFER, buffer ? buffer.underlyingResource : null);
 };

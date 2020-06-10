@@ -2,7 +2,7 @@ import { DeepImmutable, FloatArray } from '../types';
 import { Scalar } from './math.scalar';
 import { ToLinearSpace, ToGammaSpace } from './math.constants';
 import { ArrayTools } from '../Misc/arrayTools';
-// import { _TypeStore } from '../Misc/typeStore';
+import { _TypeStore } from '../Misc/typeStore';
 
 /**
  * Class used to hold a RBG color
@@ -823,12 +823,18 @@ export class Color4 {
 
     /**
      * Compute the Color4 hexadecimal code as a string
+     * @param returnAsColor3 defines if the string should only contains RGB values (off by default)
      * @returns a string containing the hexadecimal representation of the Color4 object
      */
-    public toHexString(): string {
+    public toHexString(returnAsColor3 = false): string {
         var intR = (this.r * 255) | 0;
         var intG = (this.g * 255) | 0;
         var intB = (this.b * 255) | 0;
+
+        if (returnAsColor3) {
+            return "#" + Scalar.ToHex(intR) + Scalar.ToHex(intG) + Scalar.ToHex(intB);
+        }
+
         var intA = (this.a * 255) | 0;
         return "#" + Scalar.ToHex(intR) + Scalar.ToHex(intG) + Scalar.ToHex(intB) + Scalar.ToHex(intA);
     }
@@ -992,5 +998,5 @@ export class TmpColors {
     public static Color4: Color4[] = ArrayTools.BuildArray(3, () => new Color4(0, 0, 0, 0));
 }
 
-// _TypeStore.RegisteredTypes["BABYLON.Color3"] = Color3;
-// _TypeStore.RegisteredTypes["BABYLON.Color4"] = Color4;
+_TypeStore.RegisteredTypes["BABYLON.Color3"] = Color3;
+_TypeStore.RegisteredTypes["BABYLON.Color4"] = Color4;

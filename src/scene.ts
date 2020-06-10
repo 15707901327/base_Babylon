@@ -1220,6 +1220,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     }
 
     /**
+     * 是否对灯光排序
      * Gets or sets a boolean indicating if lights must be sorted by priority (off by default)
      * This is useful if there are more lights that the maximum simulteanous authorized
      */
@@ -2384,16 +2385,21 @@ export class Scene extends AbstractScene implements IAnimatable {
     }
 
     /**
+     * 添加灯光
      * Adds the given light to this scene
      * @param newLight The light to add
      */
     public addLight(newLight: Light): void {
+
         if (this._blockEntityCollection) {
             return;
         }
+
+        // 保存灯光并排序
         this.lights.push(newLight);
         this.sortLightsByPriority();
 
+        // 添加灯光挂载点
         if (!newLight.parent) {
             newLight._addToSceneRootNodes();
         }
