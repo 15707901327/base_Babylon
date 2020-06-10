@@ -54,6 +54,7 @@ export class Geometry implements IGetSetVerticesData {
     /** @hidden */
     public _vertexBuffers: { [key: string]: VertexBuffer; };
     private _isDisposed = false;
+    // 保存顶点最大最小值
     private _extend: { minimum: Vector3, maximum: Vector3 };
     private _boundingBias: Vector2;
     /** @hidden */
@@ -269,6 +270,7 @@ export class Geometry implements IGetSetVerticesData {
                 }
             }
 
+            // 计算最大最小值
             this._updateExtend(data);
             this._resetPointsArrayCache();
 
@@ -665,6 +667,7 @@ export class Geometry implements IGetSetVerticesData {
     }
 
     /**
+     * 把几何体挂载到网格上
      * Apply current geometry to a given mesh
      * @param mesh defines the mesh to apply geometry to
      */
@@ -683,6 +686,7 @@ export class Geometry implements IGetSetVerticesData {
         // must be done before setting vertexBuffers because of mesh._createGlobalSubMesh()
         mesh._geometry = this;
 
+        // 添加到场景中
         this._scene.pushGeometry(this);
 
         meshes.push(mesh);
@@ -695,6 +699,11 @@ export class Geometry implements IGetSetVerticesData {
         }
     }
 
+    /**
+     * 跟新扩展，计算最大最小值
+     * @param data
+     * @private
+     */
     private _updateExtend(data: Nullable<FloatArray> = null) {
         if (!data) {
             data = this.getVerticesData(VertexBuffer.PositionKind)!;
@@ -703,6 +712,11 @@ export class Geometry implements IGetSetVerticesData {
         this._extend = extractMinAndMax(data, 0, this._totalVertices, this.boundingBias, 3);
     }
 
+    /**
+     * 添加到mesh中
+     * @param mesh
+     * @private
+     */
     private _applyToMesh(mesh: Mesh): void {
         var numOfMeshes = this._meshes.length;
 

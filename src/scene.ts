@@ -2089,6 +2089,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     }
 
     /**
+     * 场景中添加网格
      * Add a mesh to the list of scene's meshes
      * @param newMesh defines the mesh to add
      * @param recursive if all child meshes should also be added to the scene
@@ -2100,6 +2101,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
         this.meshes.push(newMesh);
 
+        // 同步灯光
         newMesh._resyncLightSources();
 
         if (!newMesh.parent) {
@@ -2526,6 +2528,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     }
 
     /**
+     * 几何体添加到场景中
      * Adds the given geometry to this scene
      * @param newGeometry The geometry to add
      */
@@ -2878,6 +2881,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     }
 
     /**
+     * 添加一个几何体到场景中
      * Add a new geometry to this scene
      * @param geometry defines the geometry to be added to the scene.
      * @param force defines if the geometry must be pushed even if a geometry with this id already exists
@@ -2888,6 +2892,7 @@ export class Scene extends AbstractScene implements IAnimatable {
             return false;
         }
 
+        // 几何体添加到场景中
         this.addGeometry(geometry);
 
         this.onNewGeometryAddedObservable.notifyObservers(geometry);

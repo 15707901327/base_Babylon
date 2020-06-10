@@ -265,6 +265,12 @@ export class VertexData {
         return this;
     }
 
+    /**
+     * 数据设置到mesh中
+     * @param meshOrGeometry
+     * @param updatable
+     * @private
+     */
     private _applyTo(meshOrGeometry: IGetSetVerticesData, updatable: boolean = false): VertexData {
         if (this.positions) {
             meshOrGeometry.setVerticesData(VertexBuffer.PositionKind, this.positions, updatable);

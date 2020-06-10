@@ -1408,19 +1408,29 @@ export class ThinEngine {
         return this._createVertexBuffer(data, this._gl.STATIC_DRAW);
     }
 
+    /**
+     * 创建顶点缓冲
+     * @param data
+     * @param usage
+     * @private
+     */
     private _createVertexBuffer(data: DataArray, usage: number): DataBuffer {
+        // 创建缓冲
         var vbo = this._gl.createBuffer();
 
         if (!vbo) {
             throw new Error("Unable to create vertex buffer");
         }
 
+        // 绑定数据
         let dataBuffer = new WebGLDataBuffer(vbo);
         this.bindArrayBuffer(dataBuffer);
 
+        // 开辟空间，添加数据
         if (data instanceof Array) {
             this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(data), this._gl.STATIC_DRAW);
-        } else {
+        }
+        else {
             this._gl.bufferData(this._gl.ARRAY_BUFFER, <ArrayBuffer>data, this._gl.STATIC_DRAW);
         }
 
@@ -1494,6 +1504,7 @@ export class ThinEngine {
     }
 
     /**
+     * 绑定顶点数据
      * Bind a webGL buffer to the webGL context
      * @param buffer defines the buffer to bind
      */
@@ -1525,6 +1536,11 @@ export class ThinEngine {
         this.bindBuffer(buffer, this._gl.ELEMENT_ARRAY_BUFFER);
     }
 
+    /**
+     * 绑定顶点数据
+     * @param buffer
+     * @param target
+     */
     private bindBuffer(buffer: Nullable<DataBuffer>, target: number): void {
         if (this._vaoRecordInProgress || this._currentBoundBuffer[target] !== buffer) {
             this._gl.bindBuffer(target, buffer ? buffer.underlyingResource : null);
@@ -1705,6 +1721,10 @@ export class ThinEngine {
         this._bindIndexBufferWithCache(indexBuffer);
     }
 
+    /**
+     * 解除绑定
+     * @private
+     */
     private _unbindVertexArrayObject(): void {
         if (!this._cachedVertexArrayObject) {
             return;

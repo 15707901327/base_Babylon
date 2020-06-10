@@ -39,6 +39,7 @@ export function extractMinAndMaxIndexed(positions: FloatArray, indices: IndicesA
 }
 
 /**
+ * 从位置列表中提取最大最小值
  * Extracts minimum and maximum values from a list of positions
  * @param positions defines the positions to use
  * @param start defines the start index in the positions array

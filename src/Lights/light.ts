@@ -502,6 +502,7 @@ export abstract class Light extends Node {
     }
 
     /**
+     * 监测是否影响传入的mesh
      * Specifies if the light will affect the passed mesh.
      * @param mesh The mesh to test against the light
      * @return true the mesh is affected otherwise, false.

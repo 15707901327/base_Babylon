@@ -126,6 +126,7 @@ export abstract class AbstractScene {
     public lights = new Array<Light>();
 
     /**
+     * 保存所有的网格
     * All of the (abstract) meshes added to this scene
     */
     public meshes = new Array<AbstractMesh>();
@@ -175,6 +176,7 @@ export abstract class AbstractScene {
     public morphTargetManagers = new Array<MorphTargetManager>();
 
     /**
+     * 场景中使用的几何体
      * The list of geometries used in the scene.
      */
     public geometries = new Array<Geometry>();

@@ -687,8 +687,10 @@ export class AbstractMesh extends TransformNode implements IDisposable, ICullabl
     constructor(name: string, scene: Nullable<Scene> = null) {
         super(name, scene, false);
 
+        // 场景中添加mesh，并同步灯光
         this.getScene().addMesh(this);
 
+        // 同步灯光
         this._resyncLightSources();
     }
 
@@ -768,7 +770,10 @@ export class AbstractMesh extends TransformNode implements IDisposable, ICullabl
         }
     }
 
-    /** @hidden */
+    /**
+     * 同步灯光资源
+     * @hidden
+     */
     public _resyncLightSources(): void {
         this._lightSources.length = 0;
 
