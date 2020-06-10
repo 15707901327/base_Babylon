@@ -111,7 +111,9 @@ export abstract class AbstractScene {
      */
     public rootNodes = new Array<Node>();
 
-    /** All of the cameras added to this scene
+    /**
+     * 保存场景中相机
+     * All of the cameras added to this scene
      * @see http://doc.babylonjs.com/babylon101/cameras
      */
     public cameras = new Array<Camera>();

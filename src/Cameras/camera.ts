@@ -321,8 +321,10 @@ export class Camera extends Node {
     constructor(name: string, position: Vector3, scene: Scene, setActiveOnSceneIfNoneActive = true) {
         super(name, scene);
 
+        // 场景中添加相机
         this.getScene().addCamera(this);
 
+        // 设置当前激活相机
         if (setActiveOnSceneIfNoneActive && !this.getScene().activeCamera) {
             this.getScene().activeCamera = this;
         }

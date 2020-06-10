@@ -949,7 +949,10 @@ export class Scene extends AbstractScene implements IAnimatable {
     /** All of the active cameras added to this scene. */
     public activeCameras = new Array<Camera>();
 
-    /** @hidden */
+    /**
+     * 当前激活相机
+     * @hidden
+     */
     public _activeCamera: Nullable<Camera>;
     /** Gets or sets the current active camera */
     public get activeCamera(): Nullable<Camera> {
