@@ -88,6 +88,7 @@ export class Material implements IAnimatable {
     public static readonly ClockWiseSideOrientation = Constants.MATERIAL_ClockWiseSideOrientation;
 
     /**
+     * 存储逆时针方向的侧面方向
      * Stores the counter clock-wise side orientation
      */
     public static readonly CounterClockWiseSideOrientation = Constants.MATERIAL_CounterClockWiseSideOrientation;
@@ -223,6 +224,7 @@ export class Material implements IAnimatable {
     }
 
     /**
+     * 存储侧面方向的值
      * Stores the value for side orientation
      */
     @serialize()
@@ -569,6 +571,7 @@ export class Material implements IAnimatable {
         this._scene = scene || EngineStore.LastCreatedScene;
         this.uniqueId = this._scene.getUniqueId();
 
+        // 侧面方向
         if (this._scene.useRightHandedSystem) {
             this.sideOrientation = Material.ClockWiseSideOrientation;
         } else {

@@ -1,0 +1,11 @@
+{
+  "build": {},
+  "es6modules": [
+    "core"
+  ],
+  "core": {
+    "build": {
+      "mainFolder": "./src/"
+    }
+  }
+}

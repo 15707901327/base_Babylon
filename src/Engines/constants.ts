@@ -317,6 +317,7 @@ export class Constants {
      */
     public static readonly MATERIAL_ClockWiseSideOrientation = 0;
     /**
+     * 存储逆时针方向的侧面方向
      * Stores the counter clock-wise side orientation
      */
     public static readonly MATERIAL_CounterClockWiseSideOrientation = 1;

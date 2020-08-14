@@ -797,6 +797,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
     // Coordinates system
 
+    // 使用右手坐标系
     private _useRightHandedSystem = false;
     /**
      * Gets or sets a boolean indicating if the scene must use right-handed coordinates system
